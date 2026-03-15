@@ -136,8 +136,8 @@ No `UIManager` reference in `Enemy`. No `Enemy` reference in `UIManager`. Add ne
 
 | | |
 |---|---|
-| [**goofy-pooling**](https://github.com/youpzz/goofy-pooling) | Zero-config object pooling |
-| [**goofy-timers**](https://github.com/youpzz/unity-goofy-timers) | No-coroutine timer system |
+| [**goofy-pooling**](https://github.com/youpzdev/unity-goofy-pooling) | Zero-config object pooling |
+| [**goofy-timers**](https://github.com/youpzdev/unity-goofy-timers) | No-coroutine timer system |
 | **goofy-eventbus** | You are here |
 
 ---
