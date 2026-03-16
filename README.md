@@ -22,58 +22,38 @@ EventBus<EnemyDiedEvent>.Subscribe(OnEnemyDied, this);
 
 ## Install
 
-Install `goofy-eventbus.unitypackage` or just copy `EventBus.cs` anywhere into your `Assets/` folder. Done.
+Import `goofy-eventbus.unitypackage` into your project or copy `EventBus.cs` into your `Assets/` folder. Done.
 
 ---
 
 ## Usage
 
-### Define an event
 ```csharp
+// ── Define an event ────────────────────────────────────────
 public struct EnemyDiedEvent
 {
     public Vector3 position;
     public int score;
 }
-```
 
-### Subscribe
-```csharp
-// Auto-unsubscribes when this object is destroyed
-EventBus<EnemyDiedEvent>.Subscribe(OnEnemyDied, this);
+// ── Subscribe ──────────────────────────────────────────────
+EventBus<EnemyDiedEvent>.Subscribe(OnEnemyDied, this); // auto-unsubscribes when this is destroyed
+EventBus<EnemyDiedEvent>.Subscribe(OnEnemyDied);       // no target — lives forever
 
-// Subscribe without target — lives forever
-EventBus<EnemyDiedEvent>.Subscribe(OnEnemyDied);
-```
+// ── Subscribe once ─────────────────────────────────────────
+EventBus<LevelLoadedEvent>.SubscribeOnce(OnLevelLoaded, this); // fires once, then gone
 
-### Subscribe once
-```csharp
-// Fires once, then unsubscribes automatically
-EventBus<LevelLoadedEvent>.SubscribeOnce(OnLevelLoaded, this);
-```
+// ── Raise ──────────────────────────────────────────────────
+EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent { position = transform.position, score = 100 });
 
-### Raise
-```csharp
-EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent
-{
-    position = transform.position,
-    score = 100
-});
-```
-
-### Unsubscribe manually
-```csharp
+// ── Unsubscribe manually ───────────────────────────────────
 EventBus<EnemyDiedEvent>.Unsubscribe(OnEnemyDied);
-```
 
-### Check before raising
-```csharp
+// ── Check before raising ───────────────────────────────────
 if (EventBus<EnemyDiedEvent>.HasSubscribers)
     EventBus<EnemyDiedEvent>.Raise(evt);
-```
 
-### Clear all subscribers
-```csharp
+// ── Clear all subscribers ──────────────────────────────────
 EventBus<EnemyDiedEvent>.Clear();
 ```
 
@@ -94,7 +74,6 @@ public class Enemy : MonoBehaviour
             position = transform.position,
             score = scoreValue
         });
-
         Destroy(gameObject);
     }
 }
@@ -124,11 +103,13 @@ No `UIManager` reference in `Enemy`. No `Enemy` reference in `UIManager`. Add ne
 
 ## How it works
 
-- Generic static class — separate subscriber list per event type, zero lookup overhead
-- `WeakReference` on target — auto-cleans dead subscribers on next `Raise`
-- Duplicate guard on `Subscribe` and `SubscribeOnce` — same callback can't be added twice
-- Iterates in reverse — safe to remove during iteration
-- `try/catch` per callback — one broken listener doesn't kill the rest
+| | |
+|---|---|
+| 🧬 **Generic** | Separate subscriber list per event type — zero lookup overhead |
+| 🛡️ **Null-safety** | `WeakReference` on target — auto-cleans dead subscribers on next `Raise` |
+| 🚫 **No duplicates** | Duplicate guard on `Subscribe` and `SubscribeOnce` |
+| 🔁 **Safe iteration** | Iterates in reverse — safe to remove during iteration |
+| 🔒 **Resilience** | `try/catch` per callback — one broken listener doesn't kill the rest |
 
 ---
 
@@ -136,9 +117,10 @@ No `UIManager` reference in `Enemy`. No `Enemy` reference in `UIManager`. Add ne
 
 | | |
 |---|---|
-| [**goofy-pooling**](https://github.com/youpzdev/unity-goofy-pooling) | Zero-config object pooling |
-| [**goofy-timers**](https://github.com/youpzdev/unity-goofy-timers) | No-coroutine timer system |
-| **goofy-eventbus** | You are here |
+| [**goofy-pooling**](https://github.com/youpzdev/unity-goofy-pooling) | 🐟 Zero-config object pooling |
+| [**goofy-timers**](https://github.com/youpzdev/unity-goofy-timers) | ⏱️ No-coroutine timer system |
+| **goofy-eventbus** | 📡 You are here |
+| [**goofy-save**](https://github.com/youpzdev/unity-goofy-saves) | 💾 AES-256 encrypted save system |
 
 ---
 
